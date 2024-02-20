@@ -1,10 +1,10 @@
 <?php
 
-namespace WaxFramework\Enqueue;
+namespace WpMVC\Enqueue;
 
 defined( 'ABSPATH' ) || exit;
 
-use WaxFramework\App;
+use WpMVC\App;
 
 class Enqueue {
     public static function style( string $handle, string $src, array $deps = [], $media = 'all' ) {

@@ -1,11 +1,11 @@
 <?php
 
-namespace WaxFramework\Providers;
+namespace WpMVC\Providers;
 
 defined( 'ABSPATH' ) || exit;
 
-use WaxFramework\Contracts\Provider;
-use WaxFramework\App;
+use WpMVC\Contracts\Provider;
+use WpMVC\App;
 
 class EnqueueServiceProvider implements Provider {
     public function boot() {

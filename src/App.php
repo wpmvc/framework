@@ -1,12 +1,12 @@
 <?php
 
-namespace WaxFramework;
+namespace WpMVC;
 
 use DI\Container;
-use WaxFramework\Contracts\Provider;
-use WaxFramework\Providers\EnqueueServiceProvider;
-use WaxFramework\Providers\MigrationServiceProvider;
-use WaxFramework\Providers\RouteServiceProvider;
+use WpMVC\Contracts\Provider;
+use WpMVC\Providers\EnqueueServiceProvider;
+use WpMVC\Providers\MigrationServiceProvider;
+use WpMVC\Providers\RouteServiceProvider;
 
 class App
 {

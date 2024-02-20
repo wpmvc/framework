@@ -1,6 +1,6 @@
 <?php
 
-namespace WaxFramework\Contracts;
+namespace WpMVC\Contracts;
 
 abstract class Controller
 {

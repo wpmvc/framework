@@ -1,10 +1,10 @@
 <?php
 
-namespace WaxFramework\Providers;
+namespace WpMVC\Providers;
 
-use WaxFramework\App;
-use WaxFramework\Contracts\Migration;
-use WaxFramework\Contracts\Provider;
+use WpMVC\App;
+use WpMVC\Contracts\Migration;
+use WpMVC\Contracts\Provider;
 
 class MigrationServiceProvider implements Provider {
     public function boot() {

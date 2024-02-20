@@ -1,12 +1,12 @@
 <?php
 
-namespace WaxFramework\Providers;
+namespace WpMVC\Providers;
 
-use WaxFramework\Contracts\Provider;
-use WaxFramework\App;
-use WaxFramework\Routing\Providers\RouteServiceProvider as WaxRouteServiceProvider;
+use WpMVC\Contracts\Provider;
+use WpMVC\App;
+use WpMVC\Routing\Providers\RouteServiceProvider as WpMVCRouteServiceProvider;
 
-class RouteServiceProvider extends WaxRouteServiceProvider implements Provider {
+class RouteServiceProvider extends WpMVCRouteServiceProvider implements Provider {
     public function boot() {
         parent::$container = App::$container;
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace WaxFramework\View;
+namespace WpMVC\View;
 
 defined( 'ABSPATH' ) || exit;
 
-use WaxFramework\App;
+use WpMVC\App;
 
 class View {
     public static function render( string $file, array $args = [] ):void {
