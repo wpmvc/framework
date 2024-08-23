@@ -1,6 +1,6 @@
 {
     "name": "wpmvc/framework",
-    "version": "1.0.1",
+    "version": "1.0.0",
     "license": "MIT",
     "scripts": {
         "format": "vendor/bin/phpcbf --standard=phpcs.xml",
