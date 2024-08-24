@@ -6,6 +6,12 @@ defined( 'ABSPATH' ) || exit;
 
 use ReflectionClass;
 
+/**
+ * Abstract class DTO (Data Transfer Object)
+ *
+ * Provides a base implementation for DTOs that facilitates converting object properties
+ * to an associative array and checking if properties are initialized.
+ */
 abstract class DTO {
     /**
      * Converts the object properties to an associative array.
