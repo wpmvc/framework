@@ -28,7 +28,7 @@ abstract class Repository {
      * @return int The ID of the newly inserted record.
      */
     public function create( DTO $dto ) {
-        return $this->get_query_builder()->insert_get_id( $dto->to_array() );
+        return $this->get_query_builder()->insert_get_id( $this->process_values( $dto->to_array() ) );
     }
 
     /**
@@ -38,7 +38,7 @@ abstract class Repository {
      * @return int The number of affected rows.
      */
     public function update( DTO $dto ) {
-        return $this->get_query_builder()->where( 'id', $dto->get_id() )->update( $dto->to_array() );
+        return $this->get_query_builder()->where( 'id', $dto->get_id() )->update( $this->process_values( $dto->to_array() ) );
     }
 
     /**
@@ -94,5 +94,26 @@ abstract class Repository {
      */
     public function delete_by_id( int $id ) {
         return $this->delete_by( 'id', $id );
+    }
+
+        /**
+     * Processes the given array of values to prepare them for database operations.
+     *
+     * This method converts any array or `stdClass` object values into JSON strings using `wp_json_encode`.
+     * This is typically used to ensure that complex data structures, such as arrays or generic objects,
+     * are safely stored in the database in a serialized format.
+     *
+     * @param array $values The array of values to process.
+     * @return array The processed array with JSON-encoded values for arrays and `stdClass` objects where applicable.
+     */
+    protected function process_values( array $values ) {
+        return array_map(
+            function( $value ) {
+                return is_array( $value ) || ( is_object( $value ) && get_class( $value ) === 'stdClass' )
+                    ? wp_json_encode( $value )
+                    : $value;
+            },
+            $values
+        );
     }
 }
