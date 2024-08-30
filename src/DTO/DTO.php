@@ -13,22 +13,48 @@ use ReflectionClass;
  * to an associative array and checking if properties are initialized.
  */
 abstract class DTO {
+    protected array $exclude_to_array = ['id'];
+
+    /**
+     * Get the value of exclude_to_array
+     *
+     * @return array
+     */
+    public function get_exclude_to_array(): array {
+        return $this->exclude_to_array;
+    }
+
+    /**
+     * Set the value of exclude_to_array
+     *
+     * @param array $exclude_to_array 
+     *
+     * @return self
+     */
+    public function set_exclude_to_array( array $exclude_to_array ): self {
+        $this->exclude_to_array = $exclude_to_array;
+
+        return $this;
+    }
+
     /**
      * Converts the object properties to an associative array.
      *
-     * @param bool $with_id Optional. Whether to include the 'id' property in the output. Default false.
      * @return array The associative array of property names and their values.
      */
-    public function to_array( bool $with_id = false ) {
+    public function to_array() {
         $reflection = new ReflectionClass( $this ); // Create a reflection class instance for the current object
         $values     = [];
+
+        $exclude_to_array   = $this->exclude_to_array;
+        $exclude_to_array[] = 'exclude_to_array';
 
         // Loop through each property of the object
         foreach ( $reflection->getProperties() as $property ) {
             $property_name = $property->getName();
             
-            // Skip the 'id' property if $with_id is false
-            if ( ! $with_id && 'id' === $property_name ) {
+            // Skip property if the property is excluded
+            if ( in_array( $property_name, $exclude_to_array ) ) {
                 continue;
             }
 
