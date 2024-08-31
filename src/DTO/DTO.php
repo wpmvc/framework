@@ -63,21 +63,50 @@ abstract class DTO {
             $prop->setAccessible( true );
 
             // Check if the property is initialized
-            if ( $prop->isInitialized( $this ) ) {
-                // Use a method to get the property value if it's a boolean
-                if ( $prop->getType() && 'bool' === $prop->getType()->getName() ) {
-                    $value = $this->{"is_{$property_name}"}();
-                } else {
-                    // Otherwise, use the corresponding getter method
-                    $value = $this->{"get_{$property_name}"}();
-                }
-
-                // Add the property name and value to the array
-                $values[$property_name] = $value;
+            if ( ! $prop->isInitialized( $this ) ) {
+                continue;
             }
+
+            // Use a method to get the property value if it's a boolean
+            if ( $prop->getType() && 'bool' === $prop->getType()->getName() ) {
+                $values[$property_name] = $this->{"is_{$property_name}"}();
+                continue;
+            } 
+            
+            // Otherwise, use the corresponding getter method
+            $values[$property_name] = $this->children_to_array( $this->{"get_{$property_name}"}() );
         }
 
         return $values; // Return the associative array of properties and their values
+    }
+
+    /**
+     * Recursively converts DTO properties and their children to an associative array.
+     *
+     * This method checks if the provided value is an instance of the DTO class or an array
+     * and recursively converts all nested DTO instances to arrays. This is useful for 
+     * ensuring all properties, including nested DTOs, are properly serialized.
+     *
+     * @param mixed $value The value to be converted, which could be an object, array, or scalar.
+     * @return mixed The converted value, with DTO objects transformed into arrays.
+     */
+    protected function children_to_array( $value ) {
+        if ( $value instanceof DTO ) {
+            return $value->to_array();
+        }
+
+        if ( ! is_array( $value ) ) {
+            return $value;
+        }
+
+        return array_map(
+            function( $item ) {
+                if ( $item instanceof DTO ) {
+                    return $item->to_array();
+                }
+                return $item;
+            }, $value
+        );
     }
 
     /**
