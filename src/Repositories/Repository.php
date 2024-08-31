@@ -45,12 +45,12 @@ abstract class Repository {
      * Retrieve a single record from the database based on a column value.
      *
      * @param string $column The column to search by.
-     * @param int $id The value to match in the specified column.
+     * @param mixed $value The value to match in the specified column.
      * @param array|string $columns The columns to select (default is all columns).
      * @return mixed The first matching record or null if no match is found.
      */
-    public function get_by( string $column, int $id, $columns = ['*'] ) {
-        return $this->get_query_builder()->select( $columns )->where( $column, $id )->first();
+    public function get_by( string $column, $value, $columns = ['*'] ) {
+        return $this->get_query_builder()->select( $columns )->where( $column, $value )->first();
     }
 
     /**
@@ -79,11 +79,11 @@ abstract class Repository {
      * Delete a record from the database based on a column value.
      *
      * @param string $column The column to search by.
-     * @param int $id The value to match in the specified column.
+     * @param mixed $value The value to match in the specified column.
      * @return int The number of affected rows.
      */
-    public function delete_by( string $column, int $id ) {
-        return $this->get_query_builder()->where( $column, $id )->delete();
+    public function delete_by( string $column, $value ) {
+        return $this->get_query_builder()->where( $column, $value )->delete();
     }
 
     /**
