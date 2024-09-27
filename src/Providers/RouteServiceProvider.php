@@ -15,12 +15,13 @@ class RouteServiceProvider extends WpMVCRouteServiceProvider implements Provider
         $config = App::$config->get( 'app' );
 
         parent::$properties = [
-            'rest'                      => $config['rest_api'],
-            'ajax'                      => $config['ajax_api'],
-            'middleware'                => $config['middleware'],
-            'routes-dir'                => App::get_dir( "routes" ),
-            'rest_response_action_hook' => $config['rest_response_action_hook'] ?? '',
-            'rest_response_filter_hook' => $config['rest_response_filter_hook'] ?? ''
+            'rest'                        => $config['rest_api'],
+            'ajax'                        => $config['ajax_api'],
+            'middleware'                  => $config['middleware'],
+            'routes-dir'                  => App::get_dir( "routes" ),
+            'rest_response_action_hook'   => $config['rest_response_action_hook'] ?? '',
+            'rest_response_filter_hook'   => $config['rest_response_filter_hook'] ?? '',
+            'rest_permission_filter_hook' => $config['rest_permission_filter_hook'] ?? ''
         ];
 
         parent::boot();
