@@ -22,7 +22,8 @@
         "php-di/php-di": "6.4.0",
         "wpmvc/database": "1.1.1",
         "wpmvc/request-validator": "1.1.0",
-        "wpmvc/routing": "1.1.1"
+        "wpmvc/routing": "1.1.1",
+        "wpmvc/helpers": "0.0.2"
     },
     "require-dev": {
         "bamarni/composer-bin-plugin": "1.8.2",
