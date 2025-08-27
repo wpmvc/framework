@@ -22,6 +22,7 @@
         "php-di/php-di": "6.4.0",
         "wpmvc/database": "1.2.0",
         "wpmvc/request-validator": "1.1.0",
+        "wpmvc/routing": "1.1.1",
         "wpmvc/helpers": "0.0.3"
     },
     "require-dev": {
