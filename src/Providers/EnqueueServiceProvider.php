@@ -16,9 +16,9 @@ class EnqueueServiceProvider implements Provider {
     /**
      * Enqueue scripts for all admin pages.
      *
-     * @param string $hook_suffix The current admin page.
+     * @param $hook_suffix The current admin page (ignoring param type due to third-party compatibility).
      */
-    public function action_admin_enqueue_scripts( string $hook_suffix ) : void {
+    public function action_admin_enqueue_scripts( $hook_suffix ) : void {
         require_once App::get_dir( 'enqueues/admin-enqueue.php' );
     }
 
