@@ -8,6 +8,7 @@ use WpMVC\Contracts\Provider;
 use WpMVC\Providers\EnqueueServiceProvider;
 use WpMVC\Providers\MigrationServiceProvider;
 use WpMVC\Providers\RouteServiceProvider;
+use WpMVC\Container\Container;
 
 class App
 {
