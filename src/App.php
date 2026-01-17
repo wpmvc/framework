@@ -4,7 +4,6 @@ namespace WpMVC;
 
 defined( 'ABSPATH' ) || exit;
 
-use DI\Container;
 use WpMVC\Contracts\Provider;
 use WpMVC\Providers\EnqueueServiceProvider;
 use WpMVC\Providers\MigrationServiceProvider;
