@@ -10,6 +10,7 @@ use WpMVC\Providers\MigrationServiceProvider;
 use WpMVC\Providers\RouteServiceProvider;
 use WpMVC\Providers\MailServiceProvider;
 use WpMVC\Container\Container;
+use WpMVC\Container\ContextualBindingBuilder;
 
 class App
 {
@@ -100,6 +101,16 @@ class App
         return static::$container->has( $id );
     }
 
+    /**
+     * Define a contextual binding.
+     *
+     * @param  string  $concrete
+     * @return ContextualBindingBuilder
+     */
+    public function when( string $concrete ): ContextualBindingBuilder {
+        return static::$container->when( $concrete );
+    }
+
     public function boot( string $plugin_root_file, string $plugin_root_dir ) {
         if ( ! empty( static::$loaded ) ) {
             return;
@@ -113,6 +124,7 @@ class App
         $container->set( static::class, static::$instance );
 
         $config = $container->get( Config::class );
+        $container->set( Config::class, $config ); // Ensure Config is a singleton
 
         static::$config    = $config;
         static::$container = $container;
@@ -167,6 +179,8 @@ class App
             $provider_instance = new $provider( $this );
 
             if ( $provider_instance instanceof Provider ) {
+                // Register the provider instance as a singleton for the boot phase
+                static::$container->set( $provider, $provider_instance );
                 $provider_instance->register();
             }
         }

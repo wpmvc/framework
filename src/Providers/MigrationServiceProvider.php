@@ -9,8 +9,6 @@ use WpMVC\Contracts\Migration;
 use WpMVC\Contracts\Provider;
 
 class MigrationServiceProvider extends Provider {
-    public function register() {}
-
     public function boot() {
         add_action( 'admin_init', [ $this, 'action_init' ], 5 );
     }

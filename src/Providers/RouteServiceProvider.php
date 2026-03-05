@@ -6,6 +6,8 @@ defined( 'ABSPATH' ) || exit;
 
 use WpMVC\Contracts\Provider;
 use WpMVC\App;
+use WpMVC\Routing\DataBinder;
+use WpMVC\Routing\Router;
 use WpMVC\Routing\Providers\RouteServiceProvider as WpMVCRouteServiceProvider;
 
 class RouteServiceProvider extends Provider {
@@ -37,7 +39,11 @@ class RouteServiceProvider extends Provider {
     public function register(): void {
         $config = $this->app->get_config()->get( 'app' );
 
-        $this->routing_provider::set_container( $this->app->get_container() );
+        $container = $this->app->get_container();
+
+        $container->singleton( DataBinder::class )->singleton( Router::class );
+
+        $this->routing_provider::set_container( $container );
         $this->routing_provider::set_properties(
             [
                 'rest'                        => $config['rest_api'],

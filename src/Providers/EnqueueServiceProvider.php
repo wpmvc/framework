@@ -8,8 +8,6 @@ use WpMVC\Contracts\Provider;
 use WpMVC\App;
 
 class EnqueueServiceProvider extends Provider {
-    public function register() {}
-
     public function boot() {
         add_action( 'wp_enqueue_scripts',[ $this, 'action_wp_enqueue_scripts' ] );
         add_action( 'admin_enqueue_scripts', [ $this, 'action_admin_enqueue_scripts' ] );
