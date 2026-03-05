@@ -60,7 +60,9 @@ abstract class DTO {
 
             // Access the property using reflection
             $prop = $reflection->getProperty( $property_name );
-            $prop->setAccessible( true );
+            if ( \PHP_VERSION_ID < 80100 ) {
+                $prop->setAccessible( true );
+            }
 
             // Check if the property is initialized
             if ( ! $prop->isInitialized( $this ) ) {
@@ -68,7 +70,8 @@ abstract class DTO {
             }
 
             // Use a method to get the property value if it's a boolean
-            if ( $prop->getType() && 'bool' === $prop->getType()->getName() ) {
+            $type = $prop->getType();
+            if ( $type instanceof \ReflectionNamedType && 'bool' === $type->getName() ) {
                 $values[$property_name] = $this->{"is_{$property_name}"}();
                 continue;
             } 
@@ -125,7 +128,9 @@ abstract class DTO {
         
         // Access the property using reflection
         $prop = $reflection->getProperty( $property );
-        $prop->setAccessible( true );
+        if ( \PHP_VERSION_ID < 80100 ) {
+            $prop->setAccessible( true );
+        }
         
         // Return whether the property is initialized
         return $prop->isInitialized( $this );

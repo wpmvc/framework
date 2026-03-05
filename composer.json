@@ -22,11 +22,12 @@
     ],
     "require": {
         "php": ">=7.4",
-        "wpmvc/database": "1.3.2",
-        "wpmvc/request-validator": "1.3.2",
-        "wpmvc/routing": "1.3.2",
-        "wpmvc/helpers": "1.3.2",
-        "wpmvc/container": "1.0.0"
+        "wpmvc/database": "dev-eloquent",
+        "wpmvc/request-validator": "dev-subsystem",
+        "wpmvc/routing": "dev-method-chaining",
+        "wpmvc/helpers": "dev-master",
+        "wpmvc/queue": "dev-master",
+        "wpmvc/container": "dev-refactor"
     },
     "require-dev": {
         "bamarni/composer-bin-plugin": "1.8.2",

@@ -8,9 +8,11 @@ use WpMVC\App;
 use WpMVC\Contracts\Migration;
 use WpMVC\Contracts\Provider;
 
-class MigrationServiceProvider implements Provider {
+class MigrationServiceProvider extends Provider {
+    public function register() {}
+
     public function boot() {
-        add_action( 'init', [ $this, 'action_init' ], 5 );
+        add_action( 'admin_init', [ $this, 'action_init' ], 5 );
     }
 
     /**
@@ -18,9 +20,8 @@ class MigrationServiceProvider implements Provider {
      *
      */
     public function action_init() : void {
-        $migrations      = App::$config->get( 'app.migrations' );
-        $current_version = App::$config->get( 'app.version' );
-        $option_key      = App::$config->get( 'app.migration_db_option_key' );
+        $migrations = App::get_config()->get( 'app.migrations' );
+        $option_key = App::get_config()->get( 'app.migration_db_option_key' );
 
         $executed_migrations = get_option( $option_key, [] );
 
@@ -30,13 +31,9 @@ class MigrationServiceProvider implements Provider {
                 continue;
             }
 
-            $migration = App::$container->get( $migration_class );
+            $migration = App::get_container()->get( $migration_class );
 
             if ( ! $migration instanceof Migration ) {
-                continue;
-            }
-
-            if ( 1 !== version_compare( $current_version, $migration->more_than_version() ) ) {
                 continue;
             }
 

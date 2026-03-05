@@ -33,7 +33,7 @@ class Enqueue {
             $js_deps = $asset['dependencies'];
             $version = $asset['version'];
         } else {
-            $version = App::$config->get( 'app.version' );
+            $version = App::get_config()->get( 'app.version' );
         }
 
         $method( $handle, App::get_url( "{$src}.css" ), $deps, $version, $media );
@@ -56,7 +56,7 @@ class Enqueue {
             $deps    = array_merge( $asset['dependencies'], $deps );
             $version = $asset['version'];
         } else {
-            $version = App::$config->get( 'app.version' );
+            $version = App::get_config()->get( 'app.version' );
         }
 
         /**
