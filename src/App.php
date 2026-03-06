@@ -72,7 +72,7 @@ class App
      * Resolve the given type from the container.
      *
      * @template T
-     * @param  class-string<T>|string  $abstract
+     * @param  class-string<T>  $abstract
      * @param  array                   $parameters
      * @return T
      */
@@ -84,7 +84,7 @@ class App
      * Get a service from the container.
      *
      * @template T
-     * @param  class-string<T>|string  $id
+     * @param  class-string<T>  $id
      * @param  array                   $params
      * @return T
      */
