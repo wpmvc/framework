@@ -20,6 +20,8 @@ class View {
     }
 
     public static function get_path( string $file ):string {
+        $file = str_replace( '.', DIRECTORY_SEPARATOR, $file );
+
         if ( empty( pathinfo( $file )['extension'] ) ) {
             $file .= '.php';
         }

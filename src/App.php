@@ -8,17 +8,19 @@ use WpMVC\Contracts\Provider;
 use WpMVC\Providers\EnqueueServiceProvider;
 use WpMVC\Providers\MigrationServiceProvider;
 use WpMVC\Providers\RouteServiceProvider;
+use WpMVC\Providers\MailServiceProvider;
 use WpMVC\Container\Container;
+use WpMVC\Container\ContextualBindingBuilder;
 
 class App
 {
-    public static bool $loaded;
+    protected static bool $loaded;
 
     public static App $instance;
 
-    public static Container $container;
+    protected static Container $container;
 
-    public static Config $config;
+    protected static Config $config;
 
     protected static string $root_dir;
 
@@ -34,6 +36,89 @@ class App
         return static::$instance;
     }
 
+    public static function get_container(): Container {
+        return static::$container;
+    }
+
+    public static function get_config(): Config {
+        return static::$config;
+    }
+
+    public function bind( string $abstract, $concrete = null ): self {
+        static::$container->bind( $abstract, $concrete );
+        return $this;
+    }
+
+    public function singleton( string $abstract, $concrete = null ): self {
+        static::$container->singleton( $abstract, $concrete );
+        return $this;
+    }
+
+    public function alias( string $abstract, string $alias ): self {
+        static::$container->alias( $abstract, $alias );
+        return $this;
+    }
+
+    public function tag( $abstracts, $tags ): self {
+        static::$container->tag( $abstracts, $tags );
+        return $this;
+    }
+
+    public function tagged( string $tag ): iterable {
+        return static::$container->tagged( $tag );
+    }
+
+    /**
+     * Resolve the given type from the container.
+     *
+     * @template T
+     * @param  class-string<T>  $abstract
+     * @param  array                   $parameters
+     * @return T
+     */
+    public function make( string $abstract, array $parameters = [] ) {
+        return static::$container->make( $abstract, $parameters );
+    }
+
+    /**
+     * Get a service from the container.
+     *
+     * @template T
+     * @param  class-string<T>  $id
+     * @param  array                   $params
+     * @return T
+     */
+    public function get( string $id, array $params = [] ) {
+        return static::$container->get( $id, $params );
+    }
+
+    public function set( string $id, $instance ): self {
+        static::$container->set( $id, $instance );
+        return $this;
+    }
+
+    public function has( string $id ): bool {
+        return static::$container->has( $id );
+    }
+
+    /**
+     * Define a contextual binding.
+     *
+     * @param  string  $concrete
+     * @return ContextualBindingBuilder
+     */
+    public function when( string $concrete ): ContextualBindingBuilder {
+        return static::$container->when( $concrete );
+    }
+
+    public function call( $callback, array $parameters = [] ) {
+        return static::$container->call( $callback, $parameters );
+    }
+
+    public static function __callStatic( $method, $args ) {
+        return static::instance()->$method( ...$args );
+    }
+
     public function boot( string $plugin_root_file, string $plugin_root_dir ) {
         if ( ! empty( static::$loaded ) ) {
             return;
@@ -47,6 +132,7 @@ class App
         $container->set( static::class, static::$instance );
 
         $config = $container->get( Config::class );
+        $container->set( Config::class, $config ); // Ensure Config is a singleton
 
         static::$config    = $config;
         static::$container = $container;
@@ -59,6 +145,11 @@ class App
             return;
         }
 
+        // 1. Register Phase
+        $this->register_core_service_providers();
+        $this->register_plugin_service_providers();
+
+        // 2. Boot Phase
         $this->boot_core_service_providers();
         $this->boot_plugin_service_providers();
 
@@ -77,6 +168,30 @@ class App
 
     public static function get_url( string $url = '' ) {
         return static::$root_url . ltrim( $url, '/' );
+    }
+
+    protected function register_core_service_providers(): void { 
+        $this->register_service_providers( $this->core_service_providers() );
+    }
+
+    protected function register_plugin_service_providers(): void {
+        $this->register_service_providers( static::$config->get( 'app.providers' ) );
+
+        if ( is_admin() ) {
+            $this->register_service_providers( static::$config->get( 'app.admin_providers' ) );
+        }
+    }
+
+    protected function register_service_providers( array $providers ): void {
+        foreach ( $providers as $provider ) {
+            $provider_instance = new $provider( $this );
+
+            if ( $provider_instance instanceof Provider ) {
+                // Register the provider instance as a singleton for the boot phase
+                static::$container->set( $provider, $provider_instance );
+                $provider_instance->register();
+            }
+        }
     }
 
     protected function boot_core_service_providers(): void { 
@@ -106,7 +221,8 @@ class App
         return [
             MigrationServiceProvider::class,
             RouteServiceProvider::class,
-            EnqueueServiceProvider::class
+            EnqueueServiceProvider::class,
+            MailServiceProvider::class
         ];
     }
 }
