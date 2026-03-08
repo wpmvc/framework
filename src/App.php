@@ -111,6 +111,14 @@ class App
         return static::$container->when( $concrete );
     }
 
+    public function call( $callback, array $parameters = [] ) {
+        return static::$container->call( $callback, $parameters );
+    }
+
+    public static function __callStatic( $method, $args ) {
+        return static::instance()->$method( ...$args );
+    }
+
     public function boot( string $plugin_root_file, string $plugin_root_dir ) {
         if ( ! empty( static::$loaded ) ) {
             return;
